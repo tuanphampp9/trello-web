@@ -1,35 +1,104 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import DarkModeIcon from '@mui/icons-material/DarkMode'
+import LightModeIcon from '@mui/icons-material/LightMode'
+import SettingsBrightnessIcon from '@mui/icons-material/SettingsBrightness'
+import { Container, FormControl, InputLabel, MenuItem, Select } from '@mui/material'
+import Box from '@mui/material/Box'
+import { useColorScheme } from '@mui/material/styles'
 
-function App() {
-  const [count, setCount] = useState(0)
+function ModeSelect() {
+  const { mode, setMode } = useColorScheme()
+  const handleChange = (event) => {
+    setMode(event.target.value)
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <Box sx={{ minWidth: 120 }}>
+      <FormControl fullWidth>
+        <InputLabel id="label-select-dark-light-mode">{mode}</InputLabel>
+        <Select
+          labelId="label-select-dark-light-mode"
+          id="select-dark-light-mode"
+          value={mode}
+          label="Mode"
+          defaultValue='light'
+          onChange={handleChange}
+        >
+          <MenuItem value="light">
+            <Box sx={{
+              display: 'flex',
+              alignItems: 'center',
+              gap:1
+            }}>
+              <LightModeIcon/>
+            Light
+            </Box>
+          </MenuItem>
+          <MenuItem value="dark">
+            <Box sx={{
+              display: 'flex',
+              alignItems: 'center',
+              gap:1
+            }}>
+              <DarkModeIcon/>
+            Dark
+            </Box>
+          </MenuItem>
+          <MenuItem value="system">
+            <Box sx={{
+              display: 'flex',
+              alignItems: 'center',
+              gap:1
+            }}>
+              <SettingsBrightnessIcon/>
+            System
+            </Box>
+          </MenuItem>
+        </Select>
+      </FormControl>
+    </Box>
   )
+}
+
+function App() {
+  return <Container
+    disableGutters
+    maxWidth={false}
+    sx={{
+      height: '100vh'
+    }}
+  >
+    <Box sx={{
+      backgroundColor: 'primary.light',
+      width: '100%',
+      height:(theme) => theme.trello.appBarHeight,
+      display: 'flex',
+      alignItems: 'center'
+    }}>
+      <ModeSelect/>
+    </Box>
+    <Box
+      sx={{
+        backgroundColor: 'primary.dark',
+        width: '100%',
+        height:(theme) => theme.trello.boardBarHeight,
+        display: 'flex',
+        alignItems: 'center'
+      }}
+    >
+      Board bar
+    </Box>
+    <Box
+      sx={{
+        backgroundColor: 'primary.main',
+        width: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        height: (theme) => `calc(100vh - ${theme.trello.appBarHeight} - ${theme.trello.boardBarHeight})`
+      }}
+    >
+      Board content
+    </Box>
+  </Container>
 }
 
 export default App
