@@ -31,8 +31,7 @@ export default function BoardBar() {
         justifyContent: 'space-between',
         gap:2,
         overflowX: 'auto',
-        bgcolor:(theme) => theme.palette.mode === 'dark' ? '#2c3e50' : '#1976d2',
-        borderBottom: '1px solid #00bfa5'
+        bgcolor:(theme) => theme.palette.mode === 'dark' ? '#2c3e50' : '#1976d2'
       }}
     >
       <Box
