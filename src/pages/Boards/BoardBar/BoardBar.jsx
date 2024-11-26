@@ -6,6 +6,8 @@ import AddToDriveIcon from '@mui/icons-material/AddToDrive'
 import BoltIcon from '@mui/icons-material/Bolt'
 import FilterListIcon from '@mui/icons-material/FilterList'
 import PersonAddIcon from '@mui/icons-material/PersonAdd'
+import { capitalizeFirstLetter } from '~/utils/formatters'
+
 const MENU_STYLES ={
   color:'white',
   bgcolor:'transparent',
@@ -19,7 +21,8 @@ const MENU_STYLES ={
     bgcolor:'primary.50'
   }
 }
-export default function BoardBar() {
+export default function BoardBar(props) {
+  const { board } = props
   return (
     <Box
       px={2}
@@ -38,35 +41,35 @@ export default function BoardBar() {
         sx={{ display: 'flex', alignItems: 'center', gap:2 }}
       >
         <Chip
-          icon={<DashboardIcon/>}
-          label="Tuan pham-dev"
+          icon={<DashboardIcon sx={{ color:'white !important' }}/>}
+          label={board.title}
           clickable
           sx={MENU_STYLES}
         />
 
         <Chip
-          icon={<VpnLockIcon/>}
-          label="Public/Private workspace"
+          icon={<VpnLockIcon sx={{ color:'white !important' }}/>}
+          label={capitalizeFirstLetter(board.type)}
           clickable
           sx={MENU_STYLES}
         />
 
         <Chip
-          icon={<AddToDriveIcon/>}
+          icon={<AddToDriveIcon sx={{ color:'white !important' }}/>}
           label="Add to google drive"
           clickable
           sx={MENU_STYLES}
         />
 
         <Chip
-          icon={<BoltIcon/>}
+          icon={<BoltIcon sx={{ color:'white !important' }}/>}
           label="Automation"
           clickable
           sx={MENU_STYLES}
         />
 
         <Chip
-          icon={<FilterListIcon/>}
+          icon={<FilterListIcon sx={{ color:'white !important' }}/>}
           label="Filters"
           clickable
           sx={MENU_STYLES}
