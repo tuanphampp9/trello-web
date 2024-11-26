@@ -7,38 +7,41 @@ import GroupIcon from '@mui/icons-material/Group'
 import CommentIcon from '@mui/icons-material/Comment'
 import AttachmentIcon from '@mui/icons-material/Attachment'
 import { Button, Typography } from '@mui/material'
-function CardItem({ temporaryHideMedia }) {
-  if (temporaryHideMedia) {
-    return <Card sx={{
-      cursor: 'pointer',
-      boxShadow: '0 1px 1px rgba(0,0,0,0.2)',
-      overflow: 'unset'
-    }}>
+import { useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
+function CardItem({ card }) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging
+  } = useSortable({ id: card._id, data:{ ...card } })
 
-      <CardContent sx={{
-        p:1.5,
-        '&:last-child':{
-          p:1.5
-        }
-      }}>
-        <Typography>
-            Card test 01
-        </Typography>
-      </CardContent>
-
-    </Card>
+  const dndKitCardStyle = {
+    // touchAction: 'none',//for case pointer sensor
+    transform: CSS.Translate.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1
   }
+  const shouldShowCardActions = card.memberIds.length > 0 || card.comments.length > 0 || card.attachments.length > 0
   return (
-    <Card sx={{
-      cursor: 'pointer',
-      boxShadow: '0 1px 1px rgba(0,0,0,0.2)',
-      overflow: 'unset'
-    }}>
-      <CardMedia
-        sx={{ height: 140 }}
-        image="/static/images/cards/contemplative-reptile.jpg"
-        title="green iguana"
-      />
+    <Card
+      ref={setNodeRef} style={dndKitCardStyle} {...attributes} {...listeners}
+      sx={{
+        cursor: 'pointer',
+        boxShadow: '0 1px 1px rgba(0,0,0,0.2)',
+        overflow: 'unset'
+      }}>
+      {card?.cover && (
+        <CardMedia
+          sx={{ height: 140 }}
+          image={card.cover}
+
+        />
+      ) }
+
       <CardContent sx={{
         p:1.5,
         '&:last-child':{
@@ -46,31 +49,34 @@ function CardItem({ temporaryHideMedia }) {
         }
       }}>
         <Typography>
-            Tuanphamdev mern stack
+          {card.title}
         </Typography>
       </CardContent>
-      <CardActions
+      {shouldShowCardActions && (<CardActions
         sx={{
           p: '0 4px 8px 4px'
         }}
 
       >
-        <Button size="small"
+        {card.memberIds.length > 0 && (<Button size="small"
           startIcon={<GroupIcon />}
         >
-          20
-        </Button>
-        <Button size="small"
-          startIcon={<CommentIcon />}
-        >
-          15
-        </Button>
-        <Button size="small"
+          {card.memberIds.length}
+        </Button>)}
+        {card.comments.length > 0 && (
+          <Button size="small"
+            startIcon={<CommentIcon />}
+          >
+            {card.comments.length}
+          </Button>
+        )}
+        {card.attachments.length > 0 && (<Button size="small"
           startIcon={<AttachmentIcon />}
         >
           10
-        </Button>
-      </CardActions>
+        </Button>)}
+
+      </CardActions>)}
     </Card>
   )
 }

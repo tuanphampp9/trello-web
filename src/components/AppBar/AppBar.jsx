@@ -51,7 +51,7 @@ export default function AppBar() {
           }}
         >
           <SvgIcon component={trelloIcon} inheritViewBox
-            sx={{ color:'primary.main' }}
+            sx={{ color:'white' }}
             fontSize="small"
           />
           <Typography variant="span"
