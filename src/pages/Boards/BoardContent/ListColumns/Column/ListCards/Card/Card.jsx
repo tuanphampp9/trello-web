@@ -23,7 +23,8 @@ function CardItem({ card }) {
     // touchAction: 'none',//for case pointer sensor
     transform: CSS.Translate.toString(transform),
     transition,
-    opacity: isDragging ? 0.5 : 1
+    opacity: isDragging ? 0.5 : 1,
+    border:isDragging ? '1px solid #2ecc71' : 'none'
   }
   const shouldShowCardActions = card.memberIds.length > 0 || card.comments.length > 0 || card.attachments.length > 0
   return (
