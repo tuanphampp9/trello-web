@@ -15,10 +15,11 @@ import { DndContext,
   getFirstCollision
 } from '@dnd-kit/core'
 import React, { useCallback, useEffect, useRef } from 'react'
-import { cloneDeep } from 'lodash'
+import { cloneDeep, isEmpty } from 'lodash'
 import { arrayMove } from '@dnd-kit/sortable'
 import Column from './ListColumns/Column/Column'
 import CardItem from './ListColumns/Column/ListCards/Card/Card'
+import { generatePlaceholderCard } from '~/utils/formatters'
 
 const ACTIVE_DRAG_ITEM_TYPE = {
   COLUMN: 'ACTIVE_DRAG_ITEM_TYPE_COLUMN',
@@ -163,21 +164,33 @@ export default function BoardContent(props) {
       const nextOverColumn = nextColumn.find(
         (column) => column._id === overColumn._id
       )
+      //old column
       if (nextActiveColumn) {
         //remove card in active column
         nextActiveColumn.cards = nextActiveColumn.cards.filter(
           (card) => card._id !== activeDraggingCardId
         )
+        if (isEmpty(nextActiveColumn.cards)) {
+          console.log('check', nextActiveColumn)
+          //add placeholder card in active column if empty
+          nextActiveColumn.cards = [generatePlaceholderCard(nextActiveColumn)]
+        }
         //update cardOrderIds in active column
         nextActiveColumn.cardOrderIds = nextActiveColumn.cards.map(
           (card) => card._id
         )
       }
+      //new column
       if (nextOverColumn) {
+        console.log('new column', nextOverColumn)
         //check card exist in over column
         nextOverColumn.cards = nextOverColumn.cards.filter(
           (card) => card._id !== activeDraggingCardId
         )
+        if (nextOverColumn.cards.length === 1 && nextOverColumn.cards[0].FE_PlaceholderCard) {
+          //remove placeholder card in over column if empty
+          nextOverColumn.cards = []
+        }
         //update next column into active dragging card data
         const rebuild_activeDraggingCardData = {
           ...activeDraggingCardData,
@@ -252,11 +265,10 @@ export default function BoardContent(props) {
     }
     //Tìm các điểm giao nhau va chạm với con trỏ
     const pointerIntersection = pointerWithin(args)
-    //thuật toán phát hiện va chạm sẽ trả về 1 mảng phát hiện va chạm ở đây
-    const intersection = pointerIntersection.length>0 ? pointerIntersection : rectIntersection(args)
+    if (pointerIntersection.length===0) return
 
     //Tìm overId đầu tiên trong mảng intersection
-    let overId = getFirstCollision(intersection, 'id')
+    let overId = getFirstCollision(pointerIntersection, 'id')
 
     //if overId is exist
     if (overId) {

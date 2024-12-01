@@ -26,14 +26,15 @@ function CardItem({ card }) {
     opacity: isDragging ? 0.5 : 1,
     border:isDragging ? '1px solid #2ecc71' : 'none'
   }
-  const shouldShowCardActions = card.memberIds.length > 0 || card.comments.length > 0 || card.attachments.length > 0
+  const shouldShowCardActions = card?.memberIds?.length > 0 || card?.comments?.length > 0 || card?.attachments?.length > 0
   return (
     <Card
       ref={setNodeRef} style={dndKitCardStyle} {...attributes} {...listeners}
       sx={{
         cursor: 'pointer',
         boxShadow: '0 1px 1px rgba(0,0,0,0.2)',
-        overflow: 'unset'
+        overflow: 'unset',
+        display: card?.FE_PlaceholderCard ? 'none': 'block'
       }}>
       {card?.cover && (
         <CardMedia
